@@ -1,75 +1,29 @@
-# React + TypeScript + Vite
+# 備忘録マネージャー (Memo & Memory Manager)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+日常のちょっとしたメモや料理のレシピ、技術的な備忘録を効率的に管理・検索できるWebアプリケーションです。
 
-Currently, two official plugins are available:
+## 🚀 デモ (URLがある場合)
+- [ https://memo-memory.vercel.app/ ]
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ 主な機能
+- **リアルタイム（インクリメンタル）検索**: キーワードを入力した瞬間、タイトル・本文・タグから即座にメモを絞り込みます。
+- **カテゴリフィルタ**: 「料理」「技術メモ」「その他」のカテゴリでワンクリック絞り込みが可能です。
+- **最上部ピン留め機能**: 重要なメモを一覧の最上部に固定できます。ピン留めされたメモの中でも新着順に自動ソートされます。
+- **データの永続化（LocalStorage）**: ブラウザを閉じたりリロードしたりしても、データが消えずに残ります。
+- **誤操作防止アラート**: メモを削除する際、確認ポップアップを表示して誤操作を防ぎます。
 
-## React Compiler
+## 🛠️ 使用技術
+- **Frontend**: React, TypeScript, Vite
+- **State Management**: React Hooks (`useState`, `useMemo`, `useEffect`)
+- **Data Persistence**: LocalStorage
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 💡 開発におけるこだわり・技術的アピールポイント
 
-Note: This will impact Vite dev & build performances.
+### 1. 派生ステート（useMemo）による効率的なフィルタ＆ソート
+検索やカテゴリ変更のたびに元データを破壊するのではなく、`useMemo` を活用して「元のデータ」から「条件に合うデータ」を動的に計算・派生させる設計にしました。これにより、不要な再レンダリングを防ぎ、軽量かつ高速なフィルタリングと「ピン留め優先 ＞ 作成日時の新しい順」という複雑なソートアルゴリズムを両立させています。
 
-## Expanding the ESLint configuration
+### 2. TypeScriptによる堅牢な型安全設計
+あらかじめデータの骨組み（`MemoItem`, `FilterState`）を厳格に定義してからコンポーネント開発を行いました。コンポーネント間のデータ受け渡し（Props）を型安全にすることで、予測可能な堅牢なコードベースを意識しています。
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 3. タスクの細分化と設計ファーストの開発プロセス
+自身の特性（発達障害）を活かし、「どこから手をつけるべきか迷う認知負荷」を減らすため、開発前にコンポーネント構造とデータ構造を100%決定してからコーディングに臨みました。このアプローチにより、手戻りや頓挫を防ぎ、短期間で一貫性のあるアプリケーションを完成させることができました。
